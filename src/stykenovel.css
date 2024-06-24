@@ -1,0 +1,43 @@
+.bodyfull {
+    width: 1580px;
+    max-width: 1600px;
+    min-width: 1px;
+    height: auto;
+    margin: 0 auto;
+    margin-top: 10px;
+    background: #cfe8fc;
+  }
+.divapge{
+    display: "flex";
+    justify-content: center;
+    margin: 0 auto;
+    
+}
+@media (max-width: 400px) {
+    .container2 {
+      flex-direction: column;
+    }
+    .iconn {
+      width: 315px;
+      height: auto;
+      margin-left: 2%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .textla {
+      width: 320px;
+      height: auto;
+      text-align: center;
+    }
+    .textla textarea {
+      width: 98%;
+      height: 120px;
+  
+      font-size: 20px;
+    }
+    .sbm {
+      margin: 0;
+      padding-top: 10px;
+      text-align: center;
+    }
+  }
