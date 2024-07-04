@@ -9,6 +9,9 @@ import TableAdmin from './Admin/Admin';
 import ImageUploadForm from './Test';
 import Tset from './Test';
 import TableUse from './User/User';
+import TableAuthor from './Author/Author';
+import TableNovel from './novel/Tablenovel';
+import Test from './novel/test';
 
 function App() {
   return (
@@ -18,21 +21,18 @@ function App() {
         <Routes>
           <Route path="/" element={<ImageUploadForm />} />
           <Route path="/page" element={<Pagenovel />} />
+          <Route path="/createnovel" element={<TableNovel />} />
           <Route path="/tag" element={<EnhancedTable />} />
           <Route path="/type" element={<TypeEnhancedTable />} />
           <Route path="/admin" element={<TableAdmin />} />
           <Route path="/user" element={<TableUse />} />
+          <Route path="/author" element={<TableAuthor />} />
           <Route path="/a" element={<Tset />} />
+          <Route path="/s" element={<Test />} />
         </Routes>
       
     </Router>
     </div>
   );
 }
-
-function Home() {
-  // หน้าแรกหรือหน้าหลัก
-  return <div>Welcome to Home Page</div>;
-}
-
 export default App;

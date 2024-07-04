@@ -11,7 +11,7 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 
 // eslint-disable-next-line react/prop-types
-export default function ExportViewAdmin({
+export default function ExportViewAuthor({
   selected,
   setSelected,
   numSelected,
@@ -20,8 +20,6 @@ export default function ExportViewAdmin({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // Replace with your selected IDs
 
-
-  const [DD, setJU] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setSelected([]);
@@ -38,12 +36,12 @@ export default function ExportViewAdmin({
   const handleExportSelectedAdmins = () => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/view/exportadmin", {
+      .get("http://localhost:5000/view/exportauthor", {
         params: { id: selected },
       })
       .then((response) => {
         exportToExcel(response.data, "selected_admins");
-        setJU(response.data);
+
         setLoading(false);
       })
       .catch((error) => {
@@ -55,7 +53,7 @@ export default function ExportViewAdmin({
   const handleExportAllAdmins = () => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/view/admin")
+      .get("http://localhost:5000/view/author")
       .then((response) => {
         exportToExcel(response.data, "all_admins");
         setLoading(false);

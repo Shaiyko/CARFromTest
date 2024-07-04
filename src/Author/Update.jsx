@@ -84,7 +84,7 @@ TextMaskCustomTel.propTypes = {
 };
 
 // eslint-disable-next-line react/prop-types
-export default function UpdateTag({ selected, setSelected, UserGet }) {
+export default function UpdateAuthor({ selected, setSelected, UserGet }) {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
@@ -94,8 +94,8 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
   const [parentFileId, setParentFileId] = useState(
     "19Wkip54OAhwbxlXedFHIRTOOU-wzOD3w"
   );
-  const [namef, setNameF] = useState("");
-  const [namel, setNameL] = useState("");
+  const [datarelname, setRname] = useState("");
+  const [datapenname, setPname] = useState("");
   const [datagender, setGender] = useState("");
   const [dataaddress, setAddress] = useState("");
   const [datauser, setUserName] = useState("");
@@ -105,13 +105,12 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
   const datastatus = "admin";
   const [showPassword, setShowPassword] = useState(false);
   const [data_date_of_birth, setDate_of_birth] = useState("");
-  const [datatel, setTel] = useState("");
+  const [datacontact_channels, setContact_channels] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
   const handleChangeDate = (event) => setDate_of_birth(event.target.value);
-  const handleChangeTel = (event) => setTel(event.target.value);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -158,18 +157,18 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
 
   const handleAddTag = async (fileId) => {
     axios
-      .put(`http://localhost:5000/update/admin/${selected[0]}`, {
-        f_name: namef,
-        l_name: namel,
+      .put(`http://localhost:5000/update/author/${selected[0]}`, {
+        realname: datarelname,
+        penname: datapenname,
         gender: datagender,
         date_of_birth: data_date_of_birth,
-        tel: datatel,
         address: dataaddress,
-        avatar: `https://drive.google.com/thumbnail?id=${fileId}`,
-        user_name: datauser,
         gmail: datagmail,
+        user_name: datauser,
         password: datapass,
+        avatar: `https://drive.google.com/thumbnail?id=${fileId}`,
         status: datastatus,
+        contact_channels: datacontact_channels,
       })
       .then((response) => {
         console.log("Update succeeded", response.data);
@@ -195,18 +194,18 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
 
   const handleAddAdmin2 = async (avatar) => {
     axios
-      .put(`http://localhost:5000/update/admin/${selected[0]}`, {
-        f_name: namef,
-        l_name: namel,
+      .put(`http://localhost:5000/update/author/${selected[0]}`, {
+        realname: datarelname,
+        penname: datapenname,
         gender: datagender,
         date_of_birth: data_date_of_birth,
-        tel: datatel,
         address: dataaddress,
-        avatar: avatar,
-        user_name: datauser,
         gmail: datagmail,
+        user_name: datauser,
         password: datapass,
+        avatar: avatar,
         status: datastatus,
+        contact_channels: datacontact_channels,
       })
       .then((response) => {
         console.log("Update succeeded", response.data);
@@ -232,15 +231,15 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
 
   const handleGetUpdate = () => {
     axios
-      .get(`http://localhost:5000/view/admin/${selected[0]}`)
+      .get(`http://localhost:5000/view/author/${selected[0]}`)
       .then((response) => {
         const data = response.data[0];
         setDataTag(data);
-        setNameF(data.f_name);
-        setNameL(data.l_name);
+        setRname(data.realname);
+        setPname(data.penname);
         setGender(data.gender);
         setDate_of_birth(data.date_of_birth);
-        setTel(data.tel);
+        setContact_channels(data.contact_channels);
         setAddress(data.address);
         setUserName(data.user_name);
         setGmail(data.gmail);
@@ -307,7 +306,7 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
         onClick={handleOpen}
       >
         <PersonAddAltIcon sx={{ mr: 1 }} />
-        Update Admin
+        Update Author
       </Button>
       <Modal
         open={open}
@@ -336,10 +335,10 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
             <TextField
               required
               fullWidth
-              value={namef}
+              value={datarelname}
               label="First Name"
               variant="standard"
-              onChange={(event) => setNameF(event.target.value)}
+              onChange={(event) => setRname(event.target.value)}
             />
           </Box>
           <br />
@@ -348,10 +347,10 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
             <TextField
               required
               fullWidth
-              value={namel}
+              value={datapenname}
               label="Last Name"
               variant="standard"
-              onChange={(event) => setNameL(event.target.value)}
+              onChange={(event) => setPname(event.target.value)}
             />
           </Box>
           <br />
@@ -405,18 +404,15 @@ export default function UpdateTag({ selected, setSelected, UserGet }) {
           <br />
 
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="formatted-text-mask-input">
-                Telephone
-              </InputLabel>
-              <Input
-                value={datatel}
-                onChange={handleChangeTel}
-                name="textmask"
-                id="formatted-text-mask-input"
-                inputComponent={TextMaskCustomTel}
-              />
-            </FormControl>
+            <TextField
+              fullWidth
+              label="Contact Channels"
+              helperText="Please enter phone number,email,link. Contact Channels"
+              value={datacontact_channels}
+              onChange={(e) => setContact_channels(e.target.value)}
+              variant="outlined"
+              margin="normal"
+            />
           </Box>
           <br />
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>

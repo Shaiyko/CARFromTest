@@ -181,7 +181,9 @@ export default function AddAdmin({ UserGet }) {
         password: datapass,
         status: datastatus,
       })
+
       .then((response) => {
+       
         console.log("Add succeeded", response.data);
         Swal.fire({
           position: "top-end",

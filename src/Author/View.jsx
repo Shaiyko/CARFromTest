@@ -14,7 +14,7 @@ import axios from 'axios';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 // eslint-disable-next-line react/prop-types
-export default function ViewAdmin({ selected,setSelected}) {
+export default function Viewauthor({ selected,setSelected}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -29,7 +29,7 @@ export default function ViewAdmin({ selected,setSelected}) {
     // eslint-disable-next-line react/prop-types
     if (selected && selected.length > 0) {
       axios
-        .get(`http://localhost:5000/view/admin/${selected[0]}`)
+        .get(`http://localhost:5000/view/author/${selected[0]}`)
         .then(response => {
           setAdminData(response.data[0]);
           setLoading(false);
@@ -78,7 +78,7 @@ export default function ViewAdmin({ selected,setSelected}) {
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                {adminData.f_name} {adminData.l_name}
+                {adminData.realname}( {adminData.penname})
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 <strong>Gender:</strong> {adminData.gender}
@@ -87,7 +87,7 @@ export default function ViewAdmin({ selected,setSelected}) {
                 <strong>Date of Birth:</strong> {adminData.date_of_birth}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>Telephone:</strong> {adminData.tel}
+                <strong>Contact_channels:</strong><a href= {adminData.contact_channels}> {adminData.contact_channels}</a>
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 <strong>Address:</strong> {adminData.address}

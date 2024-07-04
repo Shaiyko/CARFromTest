@@ -24,11 +24,10 @@ import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { CardMedia } from "@mui/material";
-import ExportViewAdmin from "./Export";
-import Addauthor from "./AddAuthor";
-import UpdateAuthor from "./Update";
-import ExportViewAuthor from "./Export";
-import Viewauthor from "./View"
+import CreateNovelForm from "./createnovel";
+import ExportViewAdmin from "../Admin/ExportAdminExcel";
+import ViewAdmin from "../Admin/ViewAdmin";
+import Updatenovel from "./updatenovel";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -61,55 +60,37 @@ const headCells = [
     id: "id",
     numeric: false,
     disablePadding: true,
-    label: "ID Admin",
+    label: "Photo",
   },
   {
-    id: "realname",
+    id: "name novel",
     numeric: true,
     disablePadding: false,
-    label: "Realname",
+    label: "Name novel",
   },
   {
-    id: "penname",
+    id: "creation date",
     numeric: true,
     disablePadding: false,
-    label: "Penname",
+    label: "Creation date",
   },
   {
-    id: "gender",
+    id: "updatetime",
     numeric: true,
     disablePadding: false,
-    label: "Gender",
+    label: "Update Time",
   },
   {
-    id: "date of birth",
+    id: "uploade",
     numeric: true,
     disablePadding: false,
-    label: "Date of birth",
+    label: "Uploade",
   },
   {
-    id: "address",
+    id: "name_type",
     numeric: true,
     disablePadding: false,
-    label: "Address",
-  },
-  {
-    id: "user",
-    numeric: true,
-    disablePadding: false,
-    label: "User Name",
-  },
-  {
-    id: "gmail",
-    numeric: true,
-    disablePadding: false,
-    label: "Gmail",
-  },
-  {
-    id: "contact_channels",
-    numeric: true,
-    disablePadding: false,
-    label: "Contact_Channels",
+    label: "Name_type",
   },
   {
     id: "status",
@@ -195,10 +176,10 @@ function EnhancedTableToolbar(props) {
   const DeleteTag = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:5000/delete/author",
+        "http://localhost:5000/delete/novelall",
         {
           data: {
-            id_author: selected,
+            id_novel: selected,
           },
           headers: {
             "Content-Type": "application/json",
@@ -257,18 +238,18 @@ function EnhancedTableToolbar(props) {
       {numSelected == 1 ? (
         <Tooltip title="Export select ID" sx={{ marginRight: 2 }}>
           <ExportViewAdmin
-            numSelected={numSelected}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          numSelected={numSelected}
+              selected={selected}
+              setSelected={setSelected}
+            />
         </Tooltip>
       ) : (
         <Tooltip title="Export All ID">
-          <ExportViewAuthor
-            numSelected={numSelected}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <ExportViewAdmin
+          numSelected={numSelected}
+              selected={selected}
+              setSelected={setSelected}
+            />
         </Tooltip>
       )}
       {numSelected > 0 ? (
@@ -280,14 +261,14 @@ function EnhancedTableToolbar(props) {
       ) : (
         <Tooltip title="Insert Data">
           <IconButton>
-            <Addauthor UserGet={UserGet} />
+            <CreateNovelForm UserGet={UserGet} />
           </IconButton>
         </Tooltip>
       )}
       {numSelected == 1 ? (
         <Tooltip title="Update">
           <IconButton>
-            <UpdateAuthor
+            <Updatenovel
               selected={selected}
               setSelected={setSelected}
               UserGet={UserGet}
@@ -300,7 +281,10 @@ function EnhancedTableToolbar(props) {
       {numSelected == 1 ? (
         <Tooltip title="Update">
           <IconButton>
-            <Viewauthor selected={selected} setSelected={setSelected} />
+            <ViewAdmin
+              selected={selected}
+              setSelected={setSelected}
+            />
           </IconButton>
         </Tooltip>
       ) : (
@@ -316,7 +300,7 @@ EnhancedTableToolbar.propTypes = {
   handleSearchChange: PropTypes.func.isRequired,
 };
 
-export default function TableAuthor() {
+export default function TableNovel() {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("id");
   const [selected, setSelected] = useState([]);
@@ -325,16 +309,29 @@ export default function TableAuthor() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
   const [dataTag, setTagnovel] = useState([]);
+  const [datatime, setupdatetime] = useState("");
+  const [datadate, setDate] = useState("");
+  const formatDateTime = (datatime) => {
+    const date = new Date(datatime);
+    return date.toLocaleString(); // แสดง วันเดือนปี เวลา
+  };
 
+  const formatDate = (datadate) => {
+    const date = new Date(datadate);
+    return date.toLocaleDateString(); // แสดง วันเดือนปี
+  };
   useEffect(() => {
     UserGet();
   }, []);
 
   const UserGet = () => {
     axios
-      .get("http://localhost:5000/view/author")
+      .get("http://localhost:5000/novelall/1")
       .then((response) => {
         const data = response.data;
+        const data2 = response.data[0];
+        setDate(data2.createdate);
+        setupdatetime(data2.updatetime);
         if (Array.isArray(data) && data.length > 0) {
           setTagnovel(data);
         } else {
@@ -352,19 +349,19 @@ export default function TableAuthor() {
   //
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = dataTag.map((n) => n.id_author);
+      const newSelected = dataTag.map((n) => n.id_novel);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
   //
-  const handleClick = (event, id_author) => {
-    const selectedIndex = selected.indexOf(id_author);
+  const handleClick = (event, id_novel) => {
+    const selectedIndex = selected.indexOf(id_novel);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id_author);
+      newSelected = newSelected.concat(selected, id_novel);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -390,14 +387,14 @@ export default function TableAuthor() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id_author) => selected.indexOf(id_author) !== -1;
+  const isSelected = (id_novel) => selected.indexOf(id_novel) !== -1;
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const filteredRows = useMemo(() => {
     return dataTag.filter((row) =>
-      row.penname.toLowerCase().includes(searchQuery.toLowerCase())
+      row.name_novel.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [dataTag, searchQuery]);
 
@@ -441,17 +438,17 @@ export default function TableAuthor() {
             />
             <TableBody>
               {visibleRows.map((row) => {
-                const isItemSelected = isSelected(row.id_author);
-                const labelId = `enhanced-table-checkbox-${row.id_author}`;
+                const isItemSelected = isSelected(row.id_novel);
+                const labelId = `enhanced-table-checkbox-${row.id_novel}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id_author)}
+                    onClick={(event) => handleClick(event, row.id_novel)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id_author}
+                    key={row.id_novel}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
@@ -469,20 +466,17 @@ export default function TableAuthor() {
                       padding="none"
                     >
                       <CardMedia
-                        sx={{ width: 100, height: 150 }}
-                        component="img"
-                        image={row.avatar}
-                        alt={row.avatar}
-                      />
+                      sx={{width: 100,height:150}}
+                          component="img"
+                          image={row.image_novel}
+                          alt={row.image_novel}
+                        />
                     </TableCell>
-                    <TableCell align="right">{row.realname}</TableCell>
-                    <TableCell align="right">{row.penname}</TableCell>
-                    <TableCell align="right">{row.gender}</TableCell>
-                    <TableCell align="right">{row.date_of_birth}</TableCell>
-                    <TableCell align="right">{row.address}</TableCell>
-                    <TableCell align="right">{row.user_name}</TableCell>
-                    <TableCell align="right">{row.gmail}</TableCell>
-                    <TableCell align="right">{row.contact_channels}</TableCell>
+                    <TableCell align="right">{row.name_novel}</TableCell>
+                    <TableCell align="right">{formatDate(datadate)}</TableCell>
+                    <TableCell align="right">{formatDateTime(datatime)}</TableCell>
+                    <TableCell align="right">{row.uplode}</TableCell>
+                    <TableCell align="right">{row.name_type}</TableCell>
                     <TableCell align="right">{row.status}</TableCell>
                   </TableRow>
                 );
