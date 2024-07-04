@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
 import Swal from "sweetalert2";
 import "../css/stylesloading.css";
-const CreateNovelForm = ({UserGet}) => {
+const CreateNovelForm = ({ UserGet }) => {
   const [nameN, setNameN] = useState("");
   const [description, setDescription] = useState("");
   const [maxid, setMaxIdType] = useState("");
@@ -32,9 +32,15 @@ const CreateNovelForm = ({UserGet}) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    
+    clearText();
   };
-
+  const clearText = () => {
+    setNameN("");
+    setDescription("");
+    setSelectedTypes([]);
+    setSelectedTag([]);
+   
+  };
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setFile(file);
@@ -133,8 +139,8 @@ const CreateNovelForm = ({UserGet}) => {
       const insertId = await handleAddNovel(fileId);
       await handleSaveTag(insertId);
       Swal.close();
-      UserGet();
       handleClose();
+      UserGet();
     } catch (error) {
       setError(error);
       Swal.fire({

@@ -12,6 +12,7 @@ import TableUse from './User/User';
 import TableAuthor from './Author/Author';
 import TableNovel from './novel/Tablenovel';
 import Test from './novel/test';
+import ViewAndChapter from './novel/ViewNovel';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/author" element={<TableAuthor />} />
           <Route path="/a" element={<Tset />} />
           <Route path="/s" element={<Test />} />
+          <Route path="/content" element={<ViewAndChapter />} />
         </Routes>
       
     </Router>

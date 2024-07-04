@@ -23,12 +23,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import { CardMedia } from "@mui/material";
+import { Button, CardMedia } from "@mui/material";
 import CreateNovelForm from "./createnovel";
-import ExportViewAdmin from "../Admin/ExportAdminExcel";
-import ViewAdmin from "../Admin/ViewAdmin";
 import Updatenovel from "./updatenovel";
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -84,7 +81,7 @@ const headCells = [
     id: "uploade",
     numeric: true,
     disablePadding: false,
-    label: "Uploade",
+    label: "Promulgate",
   },
   {
     id: "name_type",
@@ -235,23 +232,6 @@ function EnhancedTableToolbar(props) {
         onChange={handleSearchChange}
         sx={{ marginRight: 2 }}
       />
-      {numSelected == 1 ? (
-        <Tooltip title="Export select ID" sx={{ marginRight: 2 }}>
-          <ExportViewAdmin
-          numSelected={numSelected}
-              selected={selected}
-              setSelected={setSelected}
-            />
-        </Tooltip>
-      ) : (
-        <Tooltip title="Export All ID">
-          <ExportViewAdmin
-          numSelected={numSelected}
-              selected={selected}
-              setSelected={setSelected}
-            />
-        </Tooltip>
-      )}
       {numSelected > 0 ? (
         <Tooltip title="Delete" sx={{ marginRight: 2 }}>
           <IconButton onClick={DeleteTag}>
@@ -279,12 +259,9 @@ function EnhancedTableToolbar(props) {
         <Tooltip title="Add Data"></Tooltip>
       )}
       {numSelected == 1 ? (
-        <Tooltip title="Update">
+        <Tooltip title="View Amd Create Chapter">
           <IconButton>
-            <ViewAdmin
-              selected={selected}
-              setSelected={setSelected}
-            />
+            <Button href="/content" selected={selected}>Content</Button>
           </IconButton>
         </Tooltip>
       ) : (
@@ -440,7 +417,6 @@ export default function TableNovel() {
               {visibleRows.map((row) => {
                 const isItemSelected = isSelected(row.id_novel);
                 const labelId = `enhanced-table-checkbox-${row.id_novel}`;
-
                 return (
                   <TableRow
                     hover
@@ -466,15 +442,17 @@ export default function TableNovel() {
                       padding="none"
                     >
                       <CardMedia
-                      sx={{width: 100,height:150}}
-                          component="img"
-                          image={row.image_novel}
-                          alt={row.image_novel}
-                        />
+                        sx={{ width: 100, height: 150 }}
+                        component="img"
+                        image={row.image_novel}
+                        alt={row.image_novel}
+                      />
                     </TableCell>
                     <TableCell align="right">{row.name_novel}</TableCell>
                     <TableCell align="right">{formatDate(datadate)}</TableCell>
-                    <TableCell align="right">{formatDateTime(datatime)}</TableCell>
+                    <TableCell align="right">
+                      {formatDateTime(datatime)}
+                    </TableCell>
                     <TableCell align="right">{row.uplode}</TableCell>
                     <TableCell align="right">{row.name_type}</TableCell>
                     <TableCell align="right">{row.status}</TableCell>
@@ -489,6 +467,7 @@ export default function TableNovel() {
             </TableBody>
           </Table>
         </TableContainer>
+
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
